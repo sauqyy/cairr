@@ -1,0 +1,559 @@
+<html>
+<head>
+    <title>CAIR</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background: #000227;
+            height: 100vh;
+            scroll-behavior: smooth;
+        }
+        #about, #services, #contact{
+            margin-top: 0px;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #000;
+            padding: 5px 20px;
+            position: fixed;
+            width: 100%; /* Make it span the entire width */
+        }
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+            color: #fff;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .navbar .logo i {
+            margin-right: 10px;
+        }
+        .navbar .nav-links {
+            display: flex;
+            justify-content: center;
+            flex-grow: 1;
+            
+        }
+        .navbar .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 16px;
+         
+        }
+        .navbar .start-now {
+            background-color: #1a1aff;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-right: 40px;
+            margin-left: -40px;
+            background-color: blue; 
+            color: white; 
+            font-size: 1rem;
+            font-family: Arial, sans-serif;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3); 
+            margin-top: 10px;
+        }
+
+        .navbar .start-now:hover {
+            background-color: darkblue; /* Slightly darker blue on hover */
+        }
+        
+        .hero {
+            background-image: url('{{ url_for('static', filename='bg.png') }}'); /* Replace with your actual image path */
+            background-size: contain; /* Ensures the entire image is visible */
+            background-repeat: no-repeat; /* Prevents tiling */
+            background-position: center; /* Centers the image */
+            width: 100%; /* Full width */
+            height: 100vh; /* Full viewport height */
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            height: 100%;
+        }
+        .hero h1 {
+            font-size: 56px;
+            margin: 0;
+        }
+        .hero h2 {
+            font-size: 44px;
+            margin: 20px 0;
+        }
+        .hero p {
+            font-size: 22px;
+            margin: 30px 0 0;
+        }
+        .why-cair {
+            margin: 50px 0;
+        }
+        .why-cair h2 {
+            color: white;
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .feature {
+            background: rgb(3,19,147);
+            background: linear-gradient(180deg, rgba(3,19,147,1) 0%, rgba(1,6,45,1) 100%);
+            padding: 20px;
+            border-radius: 10px;
+            width: 200px;
+            height: 150px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-start;
+            text-align: left;
+            border: 1px solid #252E40;
+            color: white;
+            transform: translateY(40px); /* Initial position (below) */
+            transition: all 0.6s ease-in-out; 
+            opacity: 0;
+            z-index: -1;
+        }
+
+        .feature.fade-up {
+        opacity: 1;
+        transform: translateY(0); /* Moves to the original position */
+        }
+
+        .feature p {
+            margin: 0;
+            padding: 10px;
+        }
+
+        .about {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .about h1 {
+            color: white;
+            text-align: center;
+            padding-bottom: 20px;
+        }
+        
+        .about p {
+            font-size: 1em;
+            line-height: 1.6;
+            margin: 0;
+            color: white;
+            text-align: center;
+        }
+     
+        .vision {
+            color: white;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            padding-top: 60px;
+            background: #000227;
+            background: linear-gradient(180deg, #000227 20%, rgba(3,19,148,1) 100%);
+            background-size: 100%;
+            background-repeat: no-repeat; /* Prevent repeat */
+            background-position: top;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .text_vision {
+            flex: 1;
+            text-align: left;
+            margin-top: 100px;
+            max-width: 31%;
+        }
+
+        .text_vision h1 {
+            padding-bottom: 10px;
+        }
+
+        .text_vision p {
+            font-size: 1em;
+        }
+
+
+        .img_vision {
+            flex-shrink: 0;
+            max-width: 40%;
+        }
+        
+        .img_vision img {
+            padding-top: 100px;
+            height: auto;
+            display: inline-block;
+            padding-left: 73px;
+        }
+
+        .mission {
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            padding-top: 60px;
+            align-items: center;
+            background: rgb(3,19,148);
+            background-size: 100% 600px; /* Width 100%, Height 300px */
+            background-repeat: no-repeat; /* Prevent repeat */
+            background-position: top;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .text_mission {
+            flex: 1;
+            margin-top: 100px;
+            max-width: 31%;
+            padding: 0;
+            text-align: right;
+        
+        }
+
+        .text_mission h1 {
+            padding-bottom: 10px;
+        }
+
+        .text_mission p {
+            font-size: 1em;
+        }
+
+
+        .img_mission {
+            flex-shrink: 0;
+            max-width: 40%;
+            
+        }
+        
+        .img_mission img {
+            padding-top: 100px;
+            height: auto;
+            display: inline-block;
+            padding-right: 73px;
+            
+        }
+
+        .meet_team{
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 0;
+            margin: 0;
+            padding-top: 300px;
+            width: 100%;
+            background: rgb(3,19,148);
+            background: linear-gradient(180deg, rgba(3,19,147) 5%, rgba(3,3,3,1) 35%);
+        }
+    
+
+        .img_team1 {
+            display: flex;
+            padding-top: 100px;
+            justify-content: center;
+            
+        }
+
+        .g_raihan {
+            display: inline-block;
+
+        }
+
+       
+        .g_raihan img {
+            width: 60%;
+    
+        }
+
+        .g_haqy {
+            display: inline-block;
+
+        }
+        .g_haqy img {
+            width: 60%;
+        }
+
+      
+        .g_faizal {
+            display: inline-block;
+            padding: 0;
+            margin: 0;
+            padding-top: 80px;
+            padding-bottom: 380px;
+        }
+
+        .g_faizal img {
+            width: 60%;
+        }
+
+        .services {
+            color: black;
+            text-align: center;
+            justify-content: center;
+            padding: 0px;
+            padding-top: 70px;
+            background-color: white;
+        }
+
+        .services p {
+            font-size: 20px;
+        }
+
+        .services h1 {
+            font-size: 40px;
+        }
+
+        .box_all {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 0;
+            margin: 0;
+            padding-top: 10px;
+            padding-bottom: 450px;
+        }
+
+        .box_1 {
+            background-color: #001f8e;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            height: 450px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .box_1 img {
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+        .box_2 {
+            background-color: #001f8e;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            height: 450px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .box_2 img {
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+
+        .box_3 {
+            background-color: #001f8e;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            height: 450px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .box3 img {
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+
+        
+
+        .contact {
+            padding: 0;
+            margin: 0;
+            padding-top: 40px;
+            padding-bottom: 30px;
+            display: flex;
+            gap: 500px;
+            justify-content: center;
+            background: #031394;
+            color: white;
+            width: 100%;
+        }
+
+        .text_contact {
+            text-align: left;
+        }
+        
+        .text_email {
+            text-align: left;
+        }
+        
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const boxes = document.querySelectorAll(".feature");
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("fade-up");
+                    observer.unobserve(entry.target); // Stop observing after animation
+                }
+                });
+            }, { threshold: 0.5 }); // Trigger when 20% of the box is visible
+
+            boxes.forEach(box => observer.observe(box));
+            });
+    </script>
+</head>
+
+<body>
+    <section>
+        <div class="navbar">
+            <div class="logo">
+                <i class="fas fa-circle"></i> CAIR
+            </div>
+            <div class="nav-links">
+                <a href="#about">About us</a>
+                <a href="#services">Services</a>
+                <a href="#contact">Contact us</a>
+            </div>
+            <form action="/search" method="get">
+                <button type="submit" class="start-now">Start Now</button>
+            </form>
+        </div>
+    </section>
+    <section>
+        <div class="hero">
+            <div class="hero-content">
+                <h1>Crafted by Analysts</h1>
+                <h2>→ Empowering Traders.</h2>
+                <p>Unlocking opportunities in the crypto market with precision and trust.</p>
+            </div>
+        </div>
+    </section>
+        <div class="why-cair" id="about">
+            <h2>Why CAIR?</h2>
+            <div class="features">
+                <div class="feature">
+                    <p>Providing simple and accurate price predictions.</p>
+                </div>
+                <div class="feature">
+                    <p>Simplifying market information for beginners.</p>
+                </div>
+                <div class="feature">
+                    <p>Delivering Buy/Sell signals and market profit targets.</p>
+                </div>
+                <div class="feature">
+                    <p>Offering simple and affordable prediction tools.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section>
+    </div>
+        <div class="about">
+            <h1>About us</h1>
+            <p>Welcome to CAIR, a platform designed to help you make the best trading decisions in the world of cryptocurrency. We provide Buy and Sell signals powered by in-depth data analysis and the latest technology to ensure you receive accurate and timely information.</p>
+            <p>Our mission is to assist traders and investors, whether beginners or professionals, in maximizing their profit potential in the ever-evolving crypto market. Through a data-driven approach and advanced algorithms, we deliver reliable insights and signals to help you build more effective trading strategies.</p>
+            <p>We are committed to delivering transparency, speed, and accuracy in every signal we share. Our team of market experts and tech developers is dedicated to continuously updating and optimizing our system, so you can rely on us to support your trading journey with confidence.</p>
+            <p>Join our community and elevate your trading experience with CAIR.</p>
+        </div>
+    </section>
+    <section>
+        <div class="vision">
+            <div class="text_vision">
+                <h1>Our Vision</h1>
+                <p>To become the global leader in empowering individuals and businesses to navigate the cryptocurrency market confidently, turning market complexities into actionable opportunities. We aim to create a world where anyone, regardless of experience, can access the tools and insights needed to succeed in trading. By fostering innovation, transparency, and inclusivity, we aspire to be more than just a signals provider—we aim to be a guiding light in the exciting and dynamic crypto ecosystem.</p>
+            </div>
+            <div class="img_vision">
+                <img src="{{ url_for('static', filename='vision2.jpg') }}" alt="vision" width="300" height="300" class="vision_img">
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="mission">
+            <div class="img_mission">
+                <img src="{{ url_for('static', filename='vision1.jpg') }}" alt="vision" width="300" height="300" class="vision_img">
+            </div>
+            <div class="text_mission">
+                <h1>The Mission</h1>
+                <p>Our mission is to deliver high-quality crypto trading signals, backed by expert analysis and cutting-edge technology, to enable traders to make confident and profitable decisions. We are committed to building a supportive, educational community that helps traders enhance their skills, manage risks, and achieve their financial goals. By prioritizing accuracy, transparency, and user experience, we strive to revolutionize the way people approach cryptocurrency trading and unlock their true potential in this transformative market.</p>
+            </div>
+        </div>
+    </section>
+    <ssection>
+        <div class="meet_team">
+            <p>WHO'S BEHIND CAIR?</p>
+            <h1>MEET THE TEAM</h1>
+            <div class="img_team1">
+                <div class="g_raihan">
+                    <img src="{{ url_for('static', filename='raihan.png') }}" alt="raihan">
+                    <p>RAIHAN</p>
+                    <p>164231107</p>
+                </div>
+                <div class="g_haqy">
+                    <img src="{{ url_for('static', filename='haqy.png') }}" alt="haqy">
+                    <p>HAQY</p>
+                    <P>164231016</P>
+                </div>
+          
+            </div>
+            <div class="g_faizal">
+                    <img src="{{ url_for('static', filename='faizal.png') }}" alt="faizal">
+                    <p>FAIZAL</p>
+                    <p>164231095</p>
+            </div>
+        </div>
+    </ssection>
+    <section id="services">
+        <div class="Services">
+            <p>FEATURES</p>
+            <h1>Our Featuers & Services.</h1>
+            <div class="box_all">
+                <div class="box_1">
+                    <img src="{{ url_for('static', filename='icon/vector1.png') }}" height="170" width="170"/>
+                    <h3>Real-Time Crypto Alerts</h3>
+                    <p>Stay ahead in the crypto market with instant price alerts and trading signals.</p>
+                </div>
+                <div class="box_2">
+                    <img src="{{ url_for('static', filename='icon/vector2.png') }}" height="170" width="170"/>
+                    <h3>Comprehensive Market Analysis</h3>
+                    <p>Access in-depth technical and fundamental analysis for informed decisions.</p>
+                </div>
+                <div class="box_3">
+                    <img src="{{ url_for('static', filename='icon/vector3.png') }}" height="210" width="210"/>
+                    <h3>Ai-Driven Insights</h3>
+                    <p>Our AI algorithms analyze market trends to provide actionable insights.</p>
+                </div>
+            </div>
+            <div class="contact" id="contact">
+                <div class="text_contact">
+                    <p>Contact info</p>
+                    <h1>We are always<br> happy to assist you</h1>
+                </div>
+                <div class="text_email">
+                    <h3>Email</h3>
+                    <p>caircorp@gmail.com</p>
+                </div>
+            </div>
+        </div>
+    
+    </section>
+</body>
+</html>

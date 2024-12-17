@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <style>
+        body, html {
+            font-family: Arial, sans-serif;
+            margin: 0px;
+            line-height: 1.6;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0px;
+            background: rgb(2,16,123);
+            background: linear-gradient(180deg, rgba(2,16,123,1) 0%, rgba(0,10,86,1) 100%);
+            justify-content: center;
+            height: 100%;
+        }
+        .metric {
+            margin: 10px 0;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            justify-content: center;
+            text-align: left;
+         
+        }
+
+        .metric h3{
+            color: white;
+            padding-left: 0px;
+            text-align: center;
+            justify-content: center;
+      
+        }
+
+        .chart-container {
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .back-button {
+            display: inline-block;
+            text-decoration: none;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+        h1, h3 {
+            text-align: center;
+            color: #333;
+        }
+        
+        .coin_title h1 {
+            color: white;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: flex;
+            background-color: #ffffff;
+            padding: 10px;
+            padding-left: px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: #333;
+            width: 100%;
+        }
+
+        .navbar .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #222e9f; /* CAIR logo color */
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .logo span {
+            margin-left: 10px;
+        }
+
+        .menu-icon {
+            font-size: 30px;
+            cursor: pointer;
+            color: #222e9f; /* Menu Icon color */
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: -250px; /* Hidden by default */
+            background-color: #ffffff; /* Dark blue */
+            padding-top: 60px;
+            transition: 0.3s;
+            z-index: 1000;
+        }
+        .sidebar h3{
+            color: #222e9f;
+        }
+        .sidebar a {
+            padding: 12px 16px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #222e9f;
+            display: block;
+            transition: 0.2s;
+        }
+
+        .sidebar a:hover {
+            background-color: #e9ebff; /* Hover effect */
+        }
+
+        .sidebar.active {
+            left: 0; /* Show sidebar */
+        }
+
+        /* Overlay Styles */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none; /* Hidden by default */
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        .all_text {
+            justify-content: center;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="menu-icon" onclick="toggleSidebar()">&#9776;</div> <!-- Hamburger Icon -->
+        <div class="logo">
+            <span>CAIR</span>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <h3>CAIR</h3>
+        <a href="/">Home</a>
+        <a href="/search">Search</a>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <!-- JavaScript -->
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById("sidebar");
+            const overlay = document.getElementById("overlay");
+            sidebar.classList.toggle("active");
+            overlay.classList.toggle("active");
+        }
+    </script>
+    <div class="coin_title">
+        <h1>{{ ticker }}</h1>
+    </div>
+    {% if chart_path %}
+    <div class="chart-container">
+        <img src="{{ url_for('static', filename='chart.png') }}" alt="Price Chart">
+    </div>
+    {% endif %}
+    <div class="all_text">
+        <div class="metric">
+            <h3>Technical Analysis for {{ ticker }}</h3>
+            <p>{{ message }}</p>
+        </div>
+    </div>
+   
+    {% if mae is not none %}
+    <div class="metric">
+        <p><strong>Mean Absolute Error (MAE):</strong> {{ mae }}</p>
+    </div>
+    {% endif %}
+
+    
+
+    {% if win_rate is not none %}
+    <div class="metric">
+        <p><strong>Win Rate:</strong> {{ win_rate }}%</p>
+    </div>
+    {% endif %}
+</body>
+</html>

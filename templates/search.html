@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forex, Stock, & Crypto Price Trend Predictor</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100vh;
+            background: conic-gradient(
+                from 180deg at 50% 50%,
+                #021290 0deg,
+                #01062D 277.56deg,
+                #021290 360deg
+            ), #FFFFFF;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+
+        .container {
+            text-align: center;
+            padding-bottom: 10px;
+        }
+
+        .title {
+            color: white;
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 40px;
+            letter-spacing: 3px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: #E0E0E0;
+            border-radius: 50px;
+            padding: 15px 20px;
+            width: 600px;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-bar input {
+            border: none;
+            background: none;
+            outline: none;
+            font-size: 18px;
+            flex: 1;
+            margin-left: 10px;
+            color: #555;
+        }
+
+        .search-bar input::placeholder {
+            color: #888;
+        }
+
+        .search-bar i {
+            color: #888;
+            font-size: 20px;
+        }
+
+        .search-bar .button {
+            background: #D0D0D0;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #555;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .dropdown, .timeframe-dropdown {
+            display: none;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: #FFFFFF;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            text-align: left;
+            padding: 10px 0;
+        }
+
+        .dropdown-item, .timeframe-item {
+            padding: 10px 20px;
+            cursor: pointer;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .dropdown-item:hover, .timeframe-item:hover {
+            background: #F0F0F0;
+        }
+
+        .button_predict {
+            background-color: #d9d9d9;
+            color: gray;
+            font-size: 1.2rem;
+            font-family: Arial, sans-serif;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            margin-top: 40px;
+        }
+
+        /* Loading Spinner */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            display: none;
+        }
+
+        .loading-spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="title">CAIR</div>
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" id="search-input" placeholder="What’s your next prediction?" onclick="toggleDropdown()">
+            <div class="button" id="timeframe-button" onclick="toggleTimeframeDropdown()">D</div>
+            <div class="dropdown" id="dropdown">
+                <div class="dropdown-item" onclick="selectCrypto('BTC-USD')">Bitcoin (BTC)</div>
+                <div class="dropdown-item" onclick="selectCrypto('ETH-USD')">Ethereum (ETH)</div>
+                <div class="dropdown-item" onclick="selectCrypto('XRP-USD')">Ripple (XRP)</div>
+                <div class="dropdown-item" onclick="selectCrypto('LTC-USD')">Litecoin (LTC)</div>
+                <div class="dropdown-item" onclick="selectCrypto('ADA-USD')">Cardano (ADA)</div>
+            </div>
+            <div class="timeframe-dropdown" id="timeframe-dropdown">
+                <div class="timeframe-item" onclick="selectTimeframe('1d', 'D')">Daily</div>
+                <div class="timeframe-item" onclick="selectTimeframe('1wk', 'W')">Weekly</div>
+                <div class="timeframe-item" onclick="selectTimeframe('1mo', 'M')">Monthly</div>
+            </div>
+        </div>
+        <form id="predict-form" action="/train" method="post" onsubmit="showLoadingSpinner()">
+            <input type="hidden" id="ticker" name="ticker">
+            <input type="hidden" id="timeframe" name="timeframe" value="1d">
+            <button type="submit" class="button_predict">Predict</button>
+        </form>
+    </div>
+
+    <!-- Full-Screen Overlay -->
+    <div id="overlay" class="overlay">
+        <div id="loading-spinner" class="loading-spinner"></div>
+    </div>
+
+    <script>
+        function toggleDropdown() {
+            var dropdown = document.getElementById('dropdown');
+            dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function toggleTimeframeDropdown() {
+            var dropdown = document.getElementById('timeframe-dropdown');
+            dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function selectCrypto(ticker) {
+            document.getElementById('ticker').value = ticker;
+            document.getElementById('search-input').value = ticker;
+            document.getElementById('dropdown').style.display = 'none';
+        }
+
+        function selectTimeframe(timeframe, label) {
+            document.getElementById('timeframe').value = timeframe;
+            document.getElementById('timeframe-button').innerText = label;
+            document.getElementById('timeframe-dropdown').style.display = 'none';
+        }
+
+        function showLoadingSpinner() {
+            document.getElementById('overlay').style.display = 'flex';
+            document.querySelector('.button_predict').disabled = true;
+        }
+    </script>
+</body>
+</html>

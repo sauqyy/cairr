@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+</head>
+<body>
+    <h1>Prediction Result</h1>
+    <p>{{ message }}</p>
+    {% if chart_path %}
+        <img src="{{ chart_path }}" alt="Price Chart" width="600">
+    {% endif %}
+    {% if mae is not none %}
+        <p><strong>Mean Absolute Error (MAE):</strong> {{ mae }}</p>
+    {% endif %}
+    {% if win_rate is not none %}
+        <p><strong>Win Rate:</strong> {{ win_rate }}%</p>
+    {% endif %}
+    <br><br>
+    <a href="/">Back to Home</a>
+</body>
+</html>
